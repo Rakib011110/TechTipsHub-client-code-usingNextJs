@@ -74,8 +74,10 @@ export default function CreatePost() {
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     const formData = new FormData();
+
     if (!user) {
       toast.error("No user is logged in.");
+
       return;
     }
 
@@ -83,6 +85,7 @@ export default function CreatePost() {
       ...data,
       author: user._id,
     };
+
     console.log("postData", postData);
 
     formData.append("data", JSON.stringify(postData));

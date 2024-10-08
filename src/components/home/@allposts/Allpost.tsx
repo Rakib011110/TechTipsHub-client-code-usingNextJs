@@ -1,11 +1,8 @@
 import React from "react";
+import NewsFeed from "../../../app/(CommonLayout)/(home)/@newsfeed/page";
 
 const Allpost = () => {
-  return (
-    <div>
-      <h1> Here is all post</h1>
-    </div>
-  );
+  return <div>ALll post</div>;
 };
 
 export default Allpost;

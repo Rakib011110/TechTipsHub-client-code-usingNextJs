@@ -3,7 +3,7 @@ export const siteConfig = {
   description: "Your go-to source for tech guides and tutorials.",
   navItems: [
     {
-      label: "Home",
+      label: "News Feed",
       href: "/",
     },
 
