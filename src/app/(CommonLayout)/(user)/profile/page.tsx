@@ -69,7 +69,6 @@ const MyPostsComponent = () => {
     setShowModal(true);
   };
 
-  // Handle form submission for editing post
   const handleUpdatePost: SubmitHandler<FieldValues> = async (data) => {
     const formData = new FormData();
 

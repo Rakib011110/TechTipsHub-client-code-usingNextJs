@@ -45,7 +45,6 @@ const AnalyticsPage = () => {
   const [totalComments, setTotalComments] = useState(0);
   const [totalViews, setTotalViews] = useState(0);
 
-  // Default dummy data for users with no posts
   const dummyPosts: Post[] = [
     { _id: "1", title: "Post 1", reactions: 10, comments: 5, views: 100 },
     { _id: "2", title: "Post 2", reactions: 20, comments: 10, views: 150 },

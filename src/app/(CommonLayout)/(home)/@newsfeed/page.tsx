@@ -32,7 +32,6 @@ const NewsFeed = () => {
     const fetchPosts = async () => {
       try {
         const { data } = await getRecentPost();
-        // Sort by createdAt in descending order (newest first)
         const sortedPosts = data.sort(
           (a: Post, b: Post) =>
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
@@ -55,7 +54,6 @@ const NewsFeed = () => {
       // Make the API call
       if (isUpvote) {
         await upvotePost(postId);
-        // Update local state for immediate feedback
         setPosts((prevPosts) => {
           const updatedPosts = [...prevPosts];
 

@@ -87,7 +87,6 @@ export const useUpdatePost = () => {
     },
   });
 };
-// src/services/allposts.ts
 
 export const deletePost = async (id: string) => {
   const response = await clientAxiosInstance.delete(`/posts/${id}`); // Adjust the endpoint as necessary
