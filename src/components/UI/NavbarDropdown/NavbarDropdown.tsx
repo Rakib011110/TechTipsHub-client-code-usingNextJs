@@ -28,7 +28,7 @@ const NavbarDropdown = () => {
     userLoading(true);
 
     // Redirect to home if on a protected route
-    if (protectedRoutes.some((route) => pathname.match(route))) {
+    if (pathname && protectedRoutes.some((route) => pathname.match(route))) {
       router.push("/");
     }
   };
