@@ -13,7 +13,8 @@ import TIInput from "@/src/components/resubaleform/TIInput";
 
 const RegisterPage = () => {
   const searchParams = useSearchParams();
-  const redirect = searchParams.get("redirect");
+  const redirect = searchParams ? searchParams.get("redirect") : null;
+
   const router = useRouter();
 
   const {

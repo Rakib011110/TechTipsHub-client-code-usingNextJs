@@ -78,17 +78,17 @@ const AboutUsPage = () => {
                 className="team-member bg-white rounded-lg shadow-lg p-8 transition-transform transform hover:scale-105 hover:shadow-2xl"
               >
                 <img
-                  src={member.photo}
                   alt={member.name}
                   className="w-36 h-36 mx-auto rounded-full mb-6"
+                  src={member.photo}
                 />
                 <h3 className="text-2xl font-bold mb-2 text-gray-800">
                   {member.name}
                 </h3>
                 <p className="text-gray-500 text-lg">{member.role}</p>
                 <a
-                  href={`mailto:${member.email}`}
                   className="text-blue-600 underline mt-4 inline-block text-lg"
+                  href={`mailto:${member.email}`}
                 >
                   {member.email}
                 </a>

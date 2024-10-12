@@ -21,6 +21,7 @@ import { CreatPostModal } from "../../UI/createPostModal";
 export default function CreatePost() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [postImages, setPostImages] = useState<string[]>([]);
+
   console.log("postImage", postImages);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
@@ -92,6 +93,7 @@ export default function CreatePost() {
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     if (!user) {
       toast.error("No user is logged in.");
+
       return;
     }
 

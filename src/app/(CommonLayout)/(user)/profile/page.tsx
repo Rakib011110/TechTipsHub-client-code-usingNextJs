@@ -9,13 +9,13 @@ import {
   SubmitHandler,
   useForm,
 } from "react-hook-form";
+import { FaTrash } from "react-icons/fa";
 
 import { useUser } from "@/src/context/user.provider";
 import { getMyPost } from "@/src/services/mypost";
 import { deletePost, useUpdatePost } from "@/src/services/allposts";
 import TIInput from "@/src/components/resubaleform/TIInput";
 import CreatePost from "@/src/components/home/@createposts/page";
-import { FaTrash } from "react-icons/fa";
 import PostContent from "@/src/components/UI/postediteUi/PostContent";
 
 // Define a Post type interface
@@ -74,6 +74,7 @@ const MyPostsComponent = () => {
 
     if (!user || !editingPost) {
       toast.error("No user or post selected.");
+
       return;
     }
 

@@ -1,5 +1,7 @@
 import React from "react";
+
 import { User } from "../../UI/Sidebar"; // Assuming you have the `User` type defined here
+
 import UserCard from "./UserCard"; // Import UserCard
 
 const UserList = ({ title, users }: { title: string; users: User[] }) => {

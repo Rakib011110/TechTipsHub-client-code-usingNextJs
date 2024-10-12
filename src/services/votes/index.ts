@@ -27,6 +27,7 @@ import clientAxiosInstance from "@/src/lib/ClientAxiosInstance/ClientAxiosInstan
 export const upvotePost = async (postId: string) => {
   try {
     const response = await clientAxiosInstance.patch(`/posts/upvote/${postId}`);
+
     return response.data; // Return the updated post object
   } catch (error) {
     console.error("Error upvoting the post:", error);
@@ -39,6 +40,7 @@ export const downvotePost = async (postId: string) => {
     const response = await clientAxiosInstance.patch(
       `/posts/downvote/${postId}`,
     );
+
     return response.data; // Return the updated post object
   } catch (error) {
     console.error("Error downvoting the post:", error);

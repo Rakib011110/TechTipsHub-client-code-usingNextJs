@@ -1,7 +1,8 @@
-import { downvotePost, upvotePost } from "@/src/services/votes";
 import { CardFooter } from "@nextui-org/card";
 import { Button } from "@nextui-org/react";
 import React from "react";
+
+import { downvotePost, upvotePost } from "@/src/services/votes";
 
 const Votes = () => {
   const handleVote = async (

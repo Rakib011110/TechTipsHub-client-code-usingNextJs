@@ -15,6 +15,7 @@ import { getRecentPost } from "@/src/services/allposts"; // Service to get post 
 import { useUser } from "@/src/context/user.provider";
 import { useCreateComment } from "@/src/hooks/useCreatePost"; // Mutation hook for comments
 import TIInput from "@/src/components/resubaleform/TIInput";
+import PostContent from "@/src/components/UI/postediteUi/PostContent";
 
 interface Post {
   _id: string;
@@ -36,7 +37,8 @@ interface Comment {
 
 const PostDetails = () => {
   const { user } = useUser();
-  const { postid } = useParams();
+  const { postid } = useParams() as { postid: string }; // Type assertion here
+
   const methods = useForm();
   const { handleSubmit } = methods;
 
@@ -71,6 +73,7 @@ const PostDetails = () => {
 
     if (!user) {
       toast.error("No user is logged in.");
+
       return;
     }
 
@@ -119,7 +122,7 @@ const PostDetails = () => {
                 width={500}
               />
             )}
-            <p className="ml-4">{post.content}</p>
+            <PostContent className="ml-4" content={post.content} />
           </div>
         </CardBody>
 

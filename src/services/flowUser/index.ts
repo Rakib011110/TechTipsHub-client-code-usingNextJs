@@ -4,6 +4,7 @@ import clientAxiosInstance from "@/src/lib/ClientAxiosInstance/ClientAxiosInstan
 export const followUser = async (userId: string) => {
   try {
     const response = await clientAxiosInstance.post(`/users/follow/${userId}`);
+
     return response.data; // Return the updated user object or relevant data
   } catch (error) {
     console.error("Error following the user:", error);
@@ -17,6 +18,7 @@ export const unfollowUser = async (userId: string) => {
     const response = await clientAxiosInstance.post(
       `/users/unfollow/${userId}`,
     );
+
     return response.data; // Return the updated user object or relevant data
   } catch (error) {
     console.error("Error unfollowing the user:", error);

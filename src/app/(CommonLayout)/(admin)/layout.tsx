@@ -12,20 +12,20 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
         <h2 className="text-2xl font-bold mb-6">Admin Dashboard</h2>
         <nav className="flex flex-col space-y-4">
           <Link
-            href="/admin/dashboard"
             className="hover:bg-gray-700 p-2 rounded"
+            href="/admin/dashboard"
           >
             Dashboard
           </Link>
-          <Link href="/admin/users" className="hover:bg-gray-700 p-2 rounded">
+          <Link className="hover:bg-gray-700 p-2 rounded" href="/admin/users">
             Manage Users
           </Link>
-          <Link href="/admin/posts" className="hover:bg-gray-700 p-2 rounded">
+          <Link className="hover:bg-gray-700 p-2 rounded" href="/admin/posts">
             Manage Posts
           </Link>
           <Link
-            href="/admin/payments"
             className="hover:bg-gray-700 p-2 rounded"
+            href="/admin/payments"
           >
             Payment History
           </Link>

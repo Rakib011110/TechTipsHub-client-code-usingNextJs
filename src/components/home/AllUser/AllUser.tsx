@@ -1,8 +1,9 @@
 "use client";
+import React, { useEffect, useState } from "react";
+
 import { useUser } from "@/src/context/user.provider";
 import { followUser, unfollowUser } from "@/src/services/flowUser";
 import { getAllUsers } from "@/src/services/getUser";
-import React, { useEffect, useState } from "react";
 
 interface User {
   _id: string;
@@ -20,6 +21,7 @@ const AllUser = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       const data = await getAllUsers();
+
       setUsers(data?.data || []);
     };
 
@@ -51,12 +53,12 @@ const AllUser = () => {
           >
             <div className="flex items-center space-x-4">
               <img
+                alt={targetUser.name}
+                className="w-8 h-8 rounded-full object-cover"
                 src={
                   targetUser.profilePicture ||
                   "https://static.vecteezy.com/system/resources/thumbnails/020/765/399/small_2x/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg"
                 }
-                alt={targetUser.name}
-                className="w-8 h-8 rounded-full object-cover"
               />
               <div className="flex justify-between ga-5">
                 <div className="flex-grow">

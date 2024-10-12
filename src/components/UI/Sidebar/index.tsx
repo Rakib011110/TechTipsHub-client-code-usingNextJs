@@ -7,12 +7,14 @@ import { toast, ToastContainer } from "react-toastify"; // Import toast and Toas
 import "react-toastify/dist/ReactToastify.css"; // Import CSS for toast notifications
 
 import Modal from "../updatemodal/Updatemodal";
+import Flow from "../../home/allflow/Flow";
+
 import { adminLinks, userLinks } from "./constant";
 import { SidebarOptions } from "./SidebarOptions/SidebarOptions";
+
 import { useUser } from "@/src/context/user.provider";
 import clientAxiosInstance from "@/src/lib/ClientAxiosInstance/ClientAxiosInstance";
 import { getUser } from "@/src/services/getUser";
-import Flow from "../../home/allflow/Flow";
 
 export interface User {
   _id: string;
@@ -31,12 +33,14 @@ const Sidebar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [users, setUsers] = useState<User>();
+
   console.log("usersss", users);
 
   useEffect(() => {
     const fetchUserPosts = async () => {
       if (user?._id) {
         const data = await getUser(user._id);
+
         setUsers(data?.data || []); // Handle data from API response
       }
     };

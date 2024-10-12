@@ -1,5 +1,6 @@
-import envConfig from "@/src/config/envConfig";
 import axios from "axios";
+
+import envConfig from "@/src/config/envConfig";
 
 export const getUser = async (userid: string) => {
   if (!userid) {
@@ -62,6 +63,7 @@ export const gettingAllUsers = async () => {
     return res.data;
   } catch (error) {
     console.error("Error fetching users:", error);
+
     return { data: [] }; // Return empty array in case of error
   }
 };

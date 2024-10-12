@@ -8,6 +8,7 @@ import {
   useElements,
   CardElement,
 } from "@stripe/react-stripe-js";
+
 import clientAxiosInstance from "@/src/lib/ClientAxiosInstance/ClientAxiosInstance";
 
 // Load Stripe using the public key
@@ -23,9 +24,9 @@ const PaymentPage = () => {
       <div className="flex flex-col items-center justify-center min-h-screen p-4">
         <h1 className="text-2xl font-bold mb-6">Make a Payment</h1>
         <PaymentForm
+          setErrorMessage={setErrorMessage}
           setLoading={setLoading}
           setPaymentSuccess={setPaymentSuccess}
-          setErrorMessage={setErrorMessage}
         />
         {loading && <p>Processing payment...</p>}
         {paymentSuccess && (
@@ -69,10 +70,12 @@ const PaymentForm = ({
           amount: 2000, // $20 in cents
         },
       );
+
       setClientSecret(data.data.clientSecret);
     } catch (error) {
       setErrorMessage("Failed to create payment intent");
       setLoading(false);
+
       return;
     }
 
@@ -92,6 +95,7 @@ const PaymentForm = ({
       if (error) {
         setErrorMessage(error.message || "Payment failed");
         setLoading(false);
+
         return;
       }
 
@@ -104,15 +108,15 @@ const PaymentForm = ({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-md p-8">
+    <form className="bg-white rounded-lg shadow-md p-8" onSubmit={handleSubmit}>
       <div className="mb-6">
         <CardElement className="border p-6 rounded-md text-lg w-96" />{" "}
         {/* Increased padding and font size */}
       </div>
       <button
-        type="submit"
         className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors text-lg" // Increased padding and font size
         disabled={!stripe}
+        type="submit"
       >
         Pay $20
       </button>

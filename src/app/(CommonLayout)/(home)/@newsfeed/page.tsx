@@ -13,6 +13,7 @@ import {
 import { jsPDF } from "jspdf";
 import { toast } from "sonner";
 import AOS from "aos";
+
 import "aos/dist/aos.css";
 import { getRecentPost } from "@/src/services/allposts";
 import { downvotePost, upvotePost } from "@/src/services/votes";
@@ -36,6 +37,7 @@ const NewsFeed = () => {
           (a: Post, b: Post) =>
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
         );
+
         setPosts(sortedPosts);
       } catch (error) {
         console.error("Error fetching posts:", error);
@@ -203,7 +205,7 @@ const NewsFeed = () => {
           </button>
         </div> */}
 
-        <div data-aos="fade-up" className="flex flex-col space-y-6">
+        <div className="flex flex-col space-y-6" data-aos="fade-up">
           {filteredPosts.map((post, index) => (
             <Card
               key={post._id}

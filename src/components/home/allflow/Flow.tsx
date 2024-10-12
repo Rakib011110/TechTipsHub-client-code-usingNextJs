@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+
 import { User } from "../../UI/Sidebar";
+
 import { getFlowers, getFlowing } from "@/src/services/flow";
 import { useUser } from "@/src/context/user.provider";
 
@@ -9,12 +11,14 @@ const Flow = () => {
   const { user } = useUser();
   const [users, setUsers] = useState<User[]>([]); // Define users as an array of User
   const [flowing, setflowing] = useState<User[]>([]);
+
   console.log("flowing", flowing);
 
   useEffect(() => {
     const fetchUserPosts = async () => {
       if (user?._id) {
         const data = await getFlowers(user._id);
+
         setUsers(data?.data || []); // Handle data from API response
       }
     };
@@ -26,6 +30,7 @@ const Flow = () => {
     const fetchUserPosts = async () => {
       if (user?._id) {
         const data = await getFlowing(user._id);
+
         setflowing(data?.data || []); // Handle data from API response
       }
     };
@@ -41,9 +46,9 @@ const Flow = () => {
           users.map((user) => (
             <div key={user._id} className="border mx-auto p-4 mb-4 rounded">
               <img
-                src={user.profilePicture || "default-image-url"}
                 alt={`${user.name}'s profile`}
                 className="w-8 h-8 rounded-full mx-auto"
+                src={user.profilePicture || "default-image-url"}
               />
               <h2 className=" text-center text-[80%]">{user.name}</h2>
               <p className="text-[70%] text-gray-600">{user.email}</p>
@@ -62,9 +67,9 @@ const Flow = () => {
           flowing.map((user) => (
             <div key={user._id} className="border mx-auto p-4 mb-4 rounded">
               <img
-                src={user.profilePicture || "default-image-url"}
                 alt={`${user.name}'s profile`}
                 className="w-8 h-8 rounded-full mx-auto"
+                src={user.profilePicture || "default-image-url"}
               />
               <h2 className=" text-center text-[80%]">{user.name}</h2>
               <p className="text-[70%] text-gray-600">{user.email}</p>

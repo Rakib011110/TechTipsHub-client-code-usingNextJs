@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+
 import { User } from "../../UI/Sidebar";
+
 import { getFlowers, getFlowing } from "@/src/services/flow";
 import { useUser } from "@/src/context/user.provider";
 
@@ -16,6 +18,7 @@ const MyConnection = () => {
     const fetchUserPosts = async () => {
       if (user?._id) {
         const data = await getFlowers(user._id);
+
         setUsers(data?.data || []); // Handle data from API response
       }
     };
@@ -27,6 +30,7 @@ const MyConnection = () => {
     const fetchUserPosts = async () => {
       if (user?._id) {
         const data = await getFlowing(user._id);
+
         setflowing(data?.data || []); // Handle data from API response
       }
     };
@@ -46,12 +50,12 @@ const MyConnection = () => {
             >
               <div className="flex items-center space-x-4">
                 <img
+                  alt={user.name}
+                  className="w-7 h-7 rounded-full object-cover"
                   src={
                     user.profilePicture ||
                     "https://static.vecteezy.com/system/resources/thumbnails/020/765/399/small_2x/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg"
                   }
-                  alt={user.name}
-                  className="w-7 h-7 rounded-full object-cover"
                 />
                 <div>
                   <div className="flex justify-between gap-5">
@@ -80,12 +84,12 @@ const MyConnection = () => {
             >
               <div className="flex items-center space-x-4">
                 <img
+                  alt={user.name}
+                  className="w-5 h-5 rounded-full object-cover"
                   src={
                     user.profilePicture ||
                     "https://static.vecteezy.com/system/resources/thumbnails/020/765/399/small_2x/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg"
                   }
-                  alt={user.name}
-                  className="w-5 h-5 rounded-full object-cover"
                 />
                 <div>
                   <div className="flex justify-between gap-5">

@@ -49,6 +49,7 @@ const PaymentHistory = () => {
           sum + user.completedPayments,
         0,
       );
+
       setTotalCompletedPayments(totalPayments);
     };
 
@@ -103,16 +104,16 @@ const PaymentHistory = () => {
         <h2 className="text-xl font-semibold mb-4">
           Completed Payments Breakdown
         </h2>
-        <PieChart width={400} height={300}>
+        <PieChart height={300} width={400}>
           <Pie
-            data={paymentData}
-            dataKey="completedPayments"
-            nameKey="name"
+            label
             cx="50%"
             cy="50%"
-            outerRadius={100}
+            data={paymentData}
+            dataKey="completedPayments"
             fill="#8884d8"
-            label
+            nameKey="name"
+            outerRadius={100}
           >
             {paymentData.map((entry, index) => (
               <Cell
@@ -129,16 +130,16 @@ const PaymentHistory = () => {
       <div className="bg-white p-4 shadow rounded-lg mb-8">
         <h2 className="text-xl font-semibold mb-4">Payment Trend Over Users</h2>
         <LineChart
-          width={600}
-          height={300}
           data={paymentData}
+          height={300}
           margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+          width={600}
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
           <YAxis />
           <Tooltip />
-          <Line type="monotone" dataKey="completedPayments" stroke="#8884d8" />
+          <Line dataKey="completedPayments" stroke="#8884d8" type="monotone" />
         </LineChart>
       </div>
 
@@ -146,20 +147,20 @@ const PaymentHistory = () => {
       <div className="bg-white p-4 shadow rounded-lg">
         <h2 className="text-xl font-semibold mb-4">Total Payments Overview</h2>
         <AreaChart
-          width={600}
-          height={300}
           data={paymentData}
+          height={300}
           margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+          width={600}
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
           <YAxis />
           <Tooltip />
           <Area
-            type="monotone"
             dataKey="completedPayments"
-            stroke="#82ca9d"
             fill="#82ca9d"
+            stroke="#82ca9d"
+            type="monotone"
           />
         </AreaChart>
       </div>

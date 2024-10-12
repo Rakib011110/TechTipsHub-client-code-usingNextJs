@@ -20,6 +20,7 @@ const Modal: React.FC<ModalProps> = ({
     event.preventDefault();
     const formData = new FormData(event.target as HTMLFormElement);
     const data = Object.fromEntries(formData);
+
     console.log("Submitted Data:", data); // Debugging log
     onSubmit(data);
   };

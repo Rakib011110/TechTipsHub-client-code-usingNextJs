@@ -7,6 +7,7 @@ const PostContent = ({ content }: any) => {
   try {
     const rawContent = JSON.parse(content); // Assuming the content is stored as JSON
     const contentState = convertFromRaw(rawContent);
+
     editorState = EditorState.createWithContent(contentState);
   } catch (error) {
     console.error("Error parsing content:", error);
@@ -21,8 +22,8 @@ const PostContent = ({ content }: any) => {
   return (
     <Editor
       editorState={editorState}
-      onChange={handleChange} // Providing the required onChange prop
       readOnly={true} // Keeping the editor read-only
+      onChange={handleChange} // Providing the required onChange prop
     />
   );
 };

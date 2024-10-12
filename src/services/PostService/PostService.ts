@@ -1,8 +1,8 @@
 import { revalidateTag } from "next/cache";
+import axios from "axios";
 
 import axiosInstance from "@/src/lib/AxiosInstance";
 import clientAxiosInstance from "@/src/lib/ClientAxiosInstance/ClientAxiosInstance";
-import axios from "axios";
 import envConfig from "@/src/config/envConfig";
 
 // export const createPost = async (formData: FormData): Promise<any> => {

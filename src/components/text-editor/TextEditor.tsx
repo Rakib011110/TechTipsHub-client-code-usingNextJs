@@ -14,15 +14,19 @@ const TextEditor: React.FC<TextEditorProps> = ({ onChange }) => {
     setEditorState(state);
     const contentState = state.getCurrentContent();
     const rawContent = JSON.stringify(convertToRaw(contentState)); // Convert to raw JSON
+
     onChange(rawContent); // Send content to parent
   };
 
   const handleKeyCommand = (command: string) => {
     const newState = RichUtils.handleKeyCommand(editorState, command);
+
     if (newState) {
       handleEditorChange(newState);
+
       return "handled";
     }
+
     return "not-handled";
   };
 
@@ -32,9 +36,9 @@ const TextEditor: React.FC<TextEditorProps> = ({ onChange }) => {
     >
       <Editor
         editorState={editorState}
-        onChange={handleEditorChange}
         handleKeyCommand={handleKeyCommand}
         placeholder="Write your content here..."
+        onChange={handleEditorChange}
       />
     </div>
   );

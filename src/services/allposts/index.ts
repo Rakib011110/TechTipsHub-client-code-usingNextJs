@@ -1,8 +1,9 @@
 // src/services/allposts.js
-import envConfig from "@/src/config/envConfig";
-import clientAxiosInstance from "@/src/lib/ClientAxiosInstance/ClientAxiosInstance";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
+
+import envConfig from "@/src/config/envConfig";
+import clientAxiosInstance from "@/src/lib/ClientAxiosInstance/ClientAxiosInstance";
 interface Comment {
   _id: string;
   content: string;
@@ -65,6 +66,7 @@ export const updatePost = async (
         },
       },
     );
+
     return data;
   } catch (error) {
     console.error("Error updating post:", error);
@@ -90,5 +92,6 @@ export const useUpdatePost = () => {
 
 export const deletePost = async (id: string) => {
   const response = await clientAxiosInstance.delete(`/posts/${id}`); // Adjust the endpoint as necessary
+
   return response.data;
 };

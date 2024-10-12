@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Input } from "@nextui-org/input";
 import { useFormContext } from "react-hook-form";
 import { Editor, EditorState, RichUtils, convertToRaw } from "draft-js";
+
 import "draft-js/dist/Draft.css";
 import { IInput as DTIinput } from "@/src/types";
 
@@ -32,15 +33,19 @@ export default function TIInput({
   const handleEditorChange = (state: EditorState) => {
     setEditorState(state);
     const content = JSON.stringify(convertToRaw(state.getCurrentContent()));
+
     setValue(name, content); // Update form value with rich text content
   };
 
   const handleKeyCommand = (command: string, editorState: EditorState) => {
     const newState = RichUtils.handleKeyCommand(editorState, command);
+
     if (newState) {
       setEditorState(newState);
+
       return "handled";
     }
+
     return "not-handled";
   };
 

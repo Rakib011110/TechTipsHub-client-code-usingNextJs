@@ -52,8 +52,8 @@ const ContactUsPage = () => {
             <p className="text-gray-700 mb-4">
               <strong>Email:</strong>{" "}
               <a
-                href={`mailto:${contactDetails.email}`}
                 className="text-blue-600 underline"
+                href={`mailto:${contactDetails.email}`}
               >
                 {contactDetails.email}
               </a>
@@ -72,12 +72,12 @@ const ContactUsPage = () => {
                   Your Name
                 </p>
                 <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
                   required
                   className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-500"
+                  name="name"
+                  type="text"
+                  value={formData.name}
+                  onChange={handleChange}
                 />
               </div>
               <div className="mb-4">
@@ -85,12 +85,12 @@ const ContactUsPage = () => {
                   Your Email
                 </p>
                 <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
                   required
                   className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-500"
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleChange}
                 />
               </div>
               <div className="mb-6">
@@ -98,17 +98,17 @@ const ContactUsPage = () => {
                   Message
                 </p>
                 <textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
                   required
                   className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:border-blue-500"
+                  name="message"
                   rows={5}
+                  value={formData.message}
+                  onChange={handleChange}
                 />
               </div>
               <button
-                type="submit"
                 className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-300"
+                type="submit"
               >
                 Send Message
               </button>
