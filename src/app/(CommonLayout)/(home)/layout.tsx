@@ -1,14 +1,7 @@
 import MyConnection from "@/src/components/home/allflow/MyConnextion";
 import AllUser from "@/src/components/home/AllUser/AllUser";
-import { useUser } from "@/src/context/user.provider";
-import { ReactNode } from "react";
 
-const Layout = ({
-  children,
-}: {
-  children: React.ReactNode;
-  recentPosts: ReactNode;
-}) => {
+const Layout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="h-screen grid grid-cols-12 gap-4 p-1 bg-gray-50">
       {/* Left Sidebar */}
