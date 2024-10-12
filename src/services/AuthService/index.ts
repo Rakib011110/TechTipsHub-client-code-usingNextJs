@@ -78,6 +78,7 @@ export const getNewAccessToken = async () => {
         cookie: `refreshToken=${refreshToken}`,
       },
     });
+    return res; // Make sure to return the response
   } catch (error) {
     throw new Error("Failed to get new access token");
   }

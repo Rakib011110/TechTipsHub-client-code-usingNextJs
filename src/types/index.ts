@@ -10,13 +10,13 @@ export interface IUser {
   role: string;
   email: string;
   status: string;
-  mobileNumber: string;
-  profilePicture: string;
+  mobileNumber?: string;
+  profilePicture?: string;
   verified: boolean;
   followers: string[];
   following: string[];
   premiumUser: boolean; // New field to indicate premium status
-  completePayment: number;
+  completePayment?: number;
   createdAt?: string;
   updatedAt?: string;
   __v?: number;

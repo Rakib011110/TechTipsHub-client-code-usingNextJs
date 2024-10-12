@@ -41,8 +41,8 @@ export default function TIInput({
   return (
     <Input
       {...register(name, { required })}
-      errorMessage={errors[name] ? (errors[name].message as string) : ""}
-      isInvalid={!!errors[name]}
+      // errorMessage={errors[name] ? (errors[name].message as string) : ""}
+      // isInvalid={!!errors[name]}
       placeholder={placeholder}
       required={required}
       size={size}
