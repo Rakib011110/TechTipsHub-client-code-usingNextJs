@@ -1,0 +1,82 @@
+[
+  {
+    "title": "Exploring Node.js",
+    "content": "An introductory guide to building applications with Node.js.",
+    "category": "Programming",
+    "author": "64ac5f3b1a2d3e6bb7e8d23d",
+    "isPremium": false,
+    "isPremiumContent": true
+  },
+  {
+    "title": "Why Python is Great for Data Science",
+    "content": "Python has become a go-to language for data science due to its simplicity.",
+    "category": "Data Science",
+    "author": "67098e45b7b7a660a24cd70d",
+    "isPremium": true,
+    "isPremiumContent": true
+  },
+  {
+    "title": "Getting Started with React",
+    "content": "Learn how to build scalable web applications using React.",
+    "category": "Web Development",
+    "author": "67098e45b7b7a660a24cd70d",
+    "isPremium": false,
+    "isPremiumContent": false
+  },
+  {
+    "title": "Database Optimization Techniques",
+    "content": "Techniques to optimize the performance of your database.",
+    "category": "Database",
+    "author": "67097b38f6ff7e2a67995e0e",
+    "isPremium": true,
+    "isPremiumContent": false
+  },
+  {
+    "title": "Understanding Machine Learning Algorithms",
+    "content": "A deeper look into common machine learning algorithms.",
+    "category": "Artificial Intelligence",
+    "author": "64ac5f3b1a2d3e6bb7e8d241",
+    "isPremium": true,
+    "isPremiumContent": true
+  },
+  {
+    "title": "The Rise of Cloud Computing",
+    "content": "Cloud computing has revolutionized the IT industry.",
+    "category": "Cloud Computing",
+    "author": "67097b38f6ff7e2a67995e0e",
+    "isPremium": false,
+    "isPremiumContent": false
+  },
+  {
+    "title": "Building Mobile Apps with Flutter",
+    "content": "Flutter is an open-source UI toolkit for building natively compiled applications.",
+    "category": "Mobile Development",
+    "author": "67097b38f6ff7e2a67995e0e",
+    "isPremium": true,
+    "isPremiumContent": true
+  },
+  {
+    "title": "Version Control with Git",
+    "content": "Learn how Git can help manage your project's codebase efficiently.",
+    "category": "Programming",
+    "author": "66fad17c17168305b80abcc3",
+    "isPremium": false,
+    "isPremiumContent": true
+  },
+  {
+    "title": "Deploying Applications on AWS",
+    "content": "A guide to deploying web applications on Amazon Web Services.",
+    "category": "Cloud Computing",
+    "author": "66fad17c17168305b80abcc3",
+    "isPremium": true,
+    "isPremiumContent": false
+  },
+  {
+    "title": "Introduction to DevOps",
+    "content": "DevOps practices bridge the gap between development and operations teams.",
+    "category": "DevOps",
+    "author": "66fad17c17168305b80abcc3",
+    "isPremium": false,
+    "isPremiumContent": false
+  }
+]

@@ -37,7 +37,7 @@ const NavbarDropdown = () => {
     <div>
       <Dropdown>
         <DropdownTrigger>
-          <Avatar className="cursor-pointer" src={user?.profilePhoto} />
+          <Avatar className="cursor-pointer" src={user?.profilePicture} />
         </DropdownTrigger>
         <DropdownMenu aria-label="User Actions">
           {/* Home Navigation */}
@@ -46,19 +46,19 @@ const NavbarDropdown = () => {
           </DropdownItem>
 
           {/* My Posts Navigation */}
-          <DropdownItem
+          {/* <DropdownItem
             key="my-posts"
             onClick={() => handleNavigation("/my-posts")}
           >
             My Posts
-          </DropdownItem>
+          </DropdownItem> */}
 
           {/* Dashboard Navigation */}
           <DropdownItem
             key="dashboard"
-            onClick={() => handleNavigation("/dashboard")}
+            onClick={() => handleNavigation("/admin/dashboard")}
           >
-            Dashboard
+            Admin
           </DropdownItem>
 
           {/* Admin Dashboard Navigation */}
@@ -78,12 +78,12 @@ const NavbarDropdown = () => {
           </DropdownItem>
 
           {/* Create Post Navigation */}
-          <DropdownItem
+          {/* <DropdownItem
             key="create-post"
             onClick={() => handleNavigation("/profile/create-post")}
           >
             Create Post
-          </DropdownItem>
+          </DropdownItem> */}
 
           {/* Settings Navigation */}
           <DropdownItem

@@ -58,7 +58,11 @@ export const getCurrentUser = async () => {
       mobileNumber: decodedToken.mobileNumber,
       role: decodedToken.role,
       status: decodedToken.status,
-      profilePhoto: decodedToken.profilePhoto,
+      profilePicture: decodedToken.profilePicture, // Add this
+      verified: decodedToken.verified, // New field
+      followers: decodedToken.followers, // New field
+      following: decodedToken.following, // New field
+      premiumUser: decodedToken.premiumUser, // New field
     };
   }
 };

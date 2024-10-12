@@ -1,11 +1,8 @@
 import React from "react";
+import Dashboard from "./dashboard/page";
 
 const page = () => {
-  return (
-    <div>
-      <h1> here is admin deshboard </h1>
-    </div>
-  );
+  return <div>admin</div>;
 };
 
 export default page;

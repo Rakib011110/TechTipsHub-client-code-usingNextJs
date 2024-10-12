@@ -22,18 +22,19 @@ import envConfig from "@/src/config/envConfig";
 //   }
 // };
 
-export const createPost = async (formData: FormData): Promise<any> => {
+export const createPost = async (postData: any): Promise<any> => {
   try {
     const { data } = await clientAxiosInstance.post(
       "/posts/create-post",
-      formData,
+      postData, // Sending JSON data, not FormData
       {
         headers: {
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json", // Content-Type is JSON
         },
       },
     );
 
+    // You can revalidate if needed
     // revalidateTag("posts");
 
     return data;

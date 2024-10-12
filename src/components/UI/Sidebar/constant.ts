@@ -1,7 +1,8 @@
 export const userLinks = [
-  { href: "/profile", label: "Posts" },
-  { href: "/profile/received-claim-requests", label: "Received Claim Request" },
-  { href: "/profile/settings", label: "Settings" },
+  { href: "/profile", label: "My All Posts" },
+
+  { href: "/profile/analytics", label: "Analytics & Reporting" },
+  { href: "/profile/payments", label: "Make Payments" },
 ];
 
 export const adminLinks = [{ href: "/admin", label: "Admin" }];

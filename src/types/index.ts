@@ -4,35 +4,6 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
   size?: number;
 };
 
-export interface IPost {
-  _id: string;
-  title: string;
-  description: string;
-  images: string[];
-  location: string;
-  city: string;
-  dateFound: string;
-  status: string;
-  isReported: boolean;
-  reportCount: number;
-  category: ICategory;
-  user: IUser;
-  questions: string[];
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
-}
-
-export interface ICategory {
-  _id: string;
-  name: string;
-  postCount: number;
-  isDeleted: boolean;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
-}
-
 export interface IUser {
   _id: string;
   name: string;
@@ -40,7 +11,12 @@ export interface IUser {
   email: string;
   status: string;
   mobileNumber: string;
-  profilePhoto: string;
+  profilePicture: string;
+  verified: boolean;
+  followers: string[];
+  following: string[];
+  premiumUser: boolean; // New field to indicate premium status
+  completePayment: number;
   createdAt?: string;
   updatedAt?: string;
   __v?: number;
@@ -57,63 +33,20 @@ export interface IInput {
   disabled?: boolean;
 }
 
-export interface ISearchResult {
-  title: string;
-  description: string;
-  thumbnail: string;
-  id: string;
-}
-export interface IClaimRequest {
-  item: string;
-  description: string;
-  answers: string[];
-}
-
-export interface IAnswer {
-  question: string;
-  answer: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export type TClaimRequest = {
+export interface Post {
+  upvotes: number;
+  downvotes: number;
   _id: string;
-  item?: IPost;
-  claimant: string | IClaimant;
-  status: string;
-  description: string;
-  answers: IAnswer[];
-  feedback: string | null;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
-};
-
-export interface IClaimant {
-  _id: string;
-  name: string;
-  role: "USER" | "ADMIN";
-  email: string;
-  status: "ACTIVE" | "INACTIVE";
-  mobileNumber: string;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
-  profilePhoto: string;
-}
-
-export interface IReceivedClaimRequest extends IPost {
-  claimRequests: TClaimRequest[];
-}
-
-export interface IFeedbackStatus {
-  feedback: string;
-  status: string;
-}
-
-export interface ISearchResult {
   title: string;
-  description: string;
-  thumbnail: string;
-  id: string;
+  isPremium: boolean;
+  content: string;
+  images: string[];
+  category: string;
+  author: {
+    email: string;
+    name: string;
+    profilePicture: string;
+    _id: string;
+  };
+  createdAt: string; // Add createdAt field for sorting
 }
