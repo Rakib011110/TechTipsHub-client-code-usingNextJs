@@ -4,14 +4,14 @@ import React from "react";
 const teamMembers = [
   {
     name: "Alice Johnson",
-    email: "alice.johnson@techhub.com",
+    email: "rakib@techhub.com",
     photo:
       "https://media.istockphoto.com/id/645075706/photo/mature-businessman-smiling-wearing-classic-suit.jpg?s=612x612&w=0&k=20&c=nwkIaq8_3EJg9fFWMVYMv4y7kLwUuHBL8Np6Nigwhg4=",
     role: "Frontend Developer",
   },
   {
     name: "Bob Smith",
-    email: "bob.smith@techhub.com",
+    email: "ariyan@techhub.com",
     photo:
       "https://media.istockphoto.com/id/1364917563/photo/businessman-smiling-with-arms-crossed-on-white-background.jpg?s=612x612&w=0&k=20&c=NtM9Wbs1DBiGaiowsxJY6wNCnLf0POa65rYEwnZymrM=",
     role: "Backend Developer",
@@ -43,7 +43,6 @@ const AboutUsPage = () => {
           Welcome to TechHub, your go-to platform for tech tips, guides, and
           discussions. Whether you’re looking to improve your skills or stay
           updated with the latest trends, our platform connects tech enthusiasts
-          across the globe.
         </p>
 
         <section className="mission-vision mb-20">

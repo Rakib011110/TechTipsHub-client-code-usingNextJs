@@ -23,7 +23,7 @@ import PostContent from "@/src/components/UI/postediteUi/PostContent";
 
 const NewsFeed = () => {
   const [posts, setPosts] = useState<Post[]>([]);
-
+  console.log(posts);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [categoryFilter, setCategoryFilter] = useState<string>("");
   const [sortOption, setSortOption] = useState<string>("newest");
@@ -33,6 +33,8 @@ const NewsFeed = () => {
     const fetchPosts = async () => {
       try {
         const { data } = await getRecentPost();
+        // console.log(data);
+
         const sortedPosts = data.sort(
           (a: Post, b: Post) =>
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
@@ -253,6 +255,8 @@ const NewsFeed = () => {
                       {post.title}
                     </h2>
                     <PostContent content={post.content} />
+                    {/* <p content= /> */}
+                    {/* <p>{post.content} </p> */}
                   </CardBody>
                 </Link>
               </CardBody>
