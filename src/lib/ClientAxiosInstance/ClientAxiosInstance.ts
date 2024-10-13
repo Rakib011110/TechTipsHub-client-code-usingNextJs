@@ -4,7 +4,7 @@ import Cookies from "js-cookie";
 
 const clientAxiosInstance = axios.create({
   baseURL:
-    process.env.NEXT_PUBLIC_BASE_API ||
+    "https://tech-tips-tricks-hub-server-code.vercel.app/api/v1" ||
     "https://tech-tips-tricks-hub-server-code.vercel.app/api/v1",
   timeout: 1000,
   headers: {
