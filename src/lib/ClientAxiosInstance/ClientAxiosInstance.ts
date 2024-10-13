@@ -3,10 +3,8 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const clientAxiosInstance = axios.create({
-  baseURL:
-    "https://tech-tips-tricks-hub-server-code.vercel.app/api/v1" ||
-    "https://tech-tips-tricks-hub-server-code.vercel.app/api/v1",
-  timeout: 1000,
+  baseURL: process.env.NEXT_PUBLIC_BASE_API || "http://localhost:5000/api/v1",
+  timeout: 10000,
   headers: {
     "Content-Type": "application/json",
   },
