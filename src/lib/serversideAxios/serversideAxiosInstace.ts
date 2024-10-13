@@ -6,7 +6,9 @@ import { cookies } from "next/headers";
 import { getNewAccessToken } from "@/src/services/AuthService";
 
 const serverAxiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BASE_API || "http://localhost:5000/api/v1",
+  baseURL:
+    process.env.NEXT_PUBLIC_BASE_API ||
+    "https://tech-tips-tricks-hub-server-code.vercel.app/api/v1",
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
