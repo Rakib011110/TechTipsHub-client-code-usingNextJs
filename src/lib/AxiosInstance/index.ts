@@ -3,7 +3,7 @@ import axios from "axios";
 import { cookies } from "next/headers";
 
 import { getNewAccessToken } from "@/src/services/AuthService";
-
+// axios
 const axiosInstance = axios.create({
   baseURL:
     "https://tech-tips-tricks-hub-server-code.vercel.app/api/v1" ||
