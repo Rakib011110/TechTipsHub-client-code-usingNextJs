@@ -19,7 +19,11 @@ export const getRecentPost = async () => {
   };
 
   try {
-    const res = await fetch(`${envConfig.baseApi}/posts`, fetchOption);
+    const res = await fetch(
+      `https://tech-tips-tricks-hub-server-code.vercel.app/api/v1/posts`,
+      fetchOption,
+    );
+    // const res = await fetch(`${envConfig.baseApi}/posts`, fetchOption);
 
     if (!res.ok) {
       throw new Error("Failed to fetch posts");
