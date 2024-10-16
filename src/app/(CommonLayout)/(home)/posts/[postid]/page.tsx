@@ -75,7 +75,7 @@ const PostDetails = () => {
   const fetchPost = async () => {
     try {
       const { data: posts } = await getRecentPost();
-      const post = posts.find((p: Post) => p?._id === postid);
+      const post = posts.find((p: Post) => p._id === postid);
 
       if (!post) return;
       setPost(post);
@@ -89,9 +89,7 @@ const PostDetails = () => {
       try {
         const fetchedComments = await Promise.all(
           post.comments.map(async (comment: Comment) => {
-            const commentData = await getCommentsForPost(
-              comment?._id as string,
-            );
+            const commentData = await getCommentsForPost(comment._id as string);
 
             return commentData;
           }),
@@ -152,14 +150,14 @@ const PostDetails = () => {
     if (!post) return;
     try {
       if (isUpvote) {
-        await upvotePost(post?._id);
+        await upvotePost(post._id);
         setPost((prevPost) => {
           if (!prevPost) return null;
 
           return { ...prevPost, upvotes: prevPost.upvotes + 1 };
         });
       } else {
-        await downvotePost(post?._id);
+        await downvotePost(post._id);
         setPost((prevPost) => {
           if (!prevPost) return null;
 
@@ -230,7 +228,7 @@ const PostDetails = () => {
 
         <CardFooter>
           <div className="flex items-center space-x-4">
-            <Button color="success" size="sm" onClick={() => handleVote(true)}>
+            <Button color="primary" size="sm" onClick={() => handleVote(true)}>
               Upvote ({post.upvotes})
             </Button>
             <Button color="danger" size="sm" onClick={() => handleVote(false)}>
@@ -249,7 +247,7 @@ const PostDetails = () => {
         {comments.length > 0 ? (
           comments.map((comment: Comment) => (
             <div
-              key={comment?._id}
+              key={comment._id}
               className="bg-white shadow-md rounded-lg p-6 mb-6 flex flex-col gap-4"
             >
               <div className="flex items-center justify-between">
@@ -267,7 +265,7 @@ const PostDetails = () => {
               </div>
               <p className="text-gray-700">{comment?.data?.content}</p>
 
-              {user && user?._id === comment?.data?.author?._id && (
+              {user && user._id === comment?.data?.author?._id && (
                 <div className="text-right">
                   <Button
                     color="secondary"
