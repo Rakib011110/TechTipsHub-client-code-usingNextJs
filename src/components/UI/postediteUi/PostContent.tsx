@@ -1,30 +1,41 @@
 import React from "react";
-import { Editor, EditorState, convertFromRaw } from "draft-js";
+import { Editor, EditorState, convertFromRaw, ContentState } from "draft-js";
 
-const PostContent = ({ content }: any) => {
+interface PostContentProps {
+  content: string;
+}
+
+const PostContent: React.FC<PostContentProps> = ({ content }) => {
   let editorState;
 
   try {
-    const rawContent = JSON.parse(content); // Assuming the content is stored as JSON
+    // Try to parse the content as Draft.js raw format
+    const rawContent = JSON.parse(content);
     const contentState = convertFromRaw(rawContent);
 
     editorState = EditorState.createWithContent(contentState);
   } catch (error) {
-    console.error("Error parsing content:", error);
-    editorState = EditorState.createEmpty(); // Fallback to empty state if error
+    // If parsing fails, treat it as plain text and create a ContentState from it
+    console.error(
+      "Error parsing content:",
+      error,
+      "Content received:",
+      content,
+    );
+
+    const plainTextContentState = ContentState.createFromText(content);
+
+    editorState = EditorState.createWithContent(plainTextContentState);
   }
 
-  // Dummy onChange function to satisfy the required prop
-  const handleChange = (newState: any) => {
-    // Editor is read-only, so no actual change will happen
-  };
-
   return (
-    <Editor
-      editorState={editorState}
-      readOnly={true} // Keeping the editor read-only
-      onChange={handleChange} // Providing the required onChange prop
-    />
+    <div className="post-content">
+      <Editor
+        editorState={editorState}
+        readOnly={true} // Ensure it's read-only since this is for display
+        onChange={() => {}} // No need for onChange in read-only mode
+      />
+    </div>
   );
 };
 

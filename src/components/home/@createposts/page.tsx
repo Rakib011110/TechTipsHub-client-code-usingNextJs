@@ -15,14 +15,11 @@ import {
 } from "react-hook-form";
 
 import TDInput from "@/src/components/resubaleform/TDInput";
-
 import { CreatPostModal } from "../../UI/createPostModal";
 
 export default function CreatePost() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [postImages, setPostImages] = useState<string[]>([]);
-
-  console.log("postImage", postImages);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
   const { user } = useUser();
@@ -49,17 +46,14 @@ export default function CreatePost() {
         return data.secure_url;
       } else {
         toast.error(`Image upload failed: ${data.error?.message}`);
-
         return null;
       }
     } catch (error) {
       console.error("Cloudinary Upload Error:", error);
       toast.error("Image upload failed.");
-
       return null;
     }
   };
-  // -------------
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -68,7 +62,6 @@ export default function CreatePost() {
       const previews = Array.from(files).map((file) => {
         return new Promise<string>((resolve, reject) => {
           const reader = new FileReader();
-
           reader.readAsDataURL(file);
           reader.onload = () => resolve(reader.result as string);
           reader.onerror = reject;
@@ -86,14 +79,13 @@ export default function CreatePost() {
         Array.from(files).map((file) => uploadToCloudinary(file)),
       );
 
-      setPostImages(uploadedImages.filter((url) => url));
+      setPostImages(uploadedImages.filter((url) => url !== null) as string[]);
     }
   };
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     if (!user) {
       toast.error("No user is logged in.");
-
       return;
     }
 
@@ -155,6 +147,8 @@ export default function CreatePost() {
                 Post Title <span className="text-red-500">*</span>
               </label>
               <TDInput
+                size="sm"
+                as="richtext"
                 required
                 name="title"
                 placeholder="Enter your post title"

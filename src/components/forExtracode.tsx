@@ -228,7 +228,7 @@ const PostDetails = () => {
 
         <CardFooter>
           <div className="flex items-center space-x-4">
-            <Button color="success" size="sm" onClick={() => handleVote(true)}>
+            <Button color="primary" size="sm" onClick={() => handleVote(true)}>
               Upvote ({post.upvotes})
             </Button>
             <Button color="danger" size="sm" onClick={() => handleVote(false)}>
@@ -239,66 +239,39 @@ const PostDetails = () => {
       </Card>
 
       {/* Comments Section */}
-      <div className="mt-10">
-        <h2 className="text-3xl font-semibold text-gray-900 mb-6 border-b pb-3">
-          Comments
-        </h2>
+      <div className="mt-6">
+        <h2 className="text-2xl font-bold mb-4">Comments</h2>
 
         {comments.length > 0 ? (
           comments.map((comment: Comment) => (
-            <div
-              key={comment._id}
-              className="bg-white shadow-md rounded-lg p-6 mb-6 flex flex-col gap-4"
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <div className="flex items-center justify-center h-10 w-10 rounded-full bg-blue-500 text-white font-bold">
-                    {comment?.data?.author?.name?.charAt(0)}
-                  </div>
-                  <div className="text-lg font-medium text-gray-800">
-                    {comment?.data?.author.name}
-                  </div>
-                </div>
-                <p className="text-sm text-gray-500">
-                  {new Date(comment?.data?.createdAt).toLocaleString()}
-                </p>
-              </div>
-              <p className="text-gray-700">{comment?.data?.content}</p>
+            <div key={comment._id} className="bg-gray-100 p-4 rounded-lg mb-4">
+              <p>{comment?.data?.author.name}</p>
+              <p>{comment?.data?.content}</p>
+              <p className="text-sm text-gray-500">
+                {new Date(comment?.data?.createdAt).toLocaleString()}
+              </p>
 
               {user && user._id === comment?.data?.author._id && (
-                <div className="text-right">
-                  <Button
-                    color="secondary"
-                    size="sm"
-                    onClick={() =>
-                      openEditModal(comment?.data?._id, comment?.data?.content)
-                    }
-                  >
-                    Edit
-                  </Button>
-                </div>
+                <Button
+                  color="secondary"
+                  onClick={() =>
+                    openEditModal(comment?.data?._id, comment?.data?.content)
+                  }
+                >
+                  Edit
+                </Button>
               )}
             </div>
           ))
         ) : (
-          <p className="text-gray-600">
-            No comments yet. Be the first to comment!
-          </p>
+          <p>No comments yet. Be the first to comment!</p>
         )}
 
         {/* Comment Input Form */}
         <FormProvider {...methods}>
-          <form
-            className="bg-gray-50 shadow-sm rounded-lg p-6 mt-6 flex flex-col gap-4"
-            onSubmit={handleSubmit(onSubmit)}
-          >
-            <TIInput name="content" placeholder="Write your comment here..." />
-            <Button
-              color="primary"
-              type="submit"
-              size="lg"
-              className="self-end bg-blue-600"
-            >
+          <form className="mt-4 w-full" onSubmit={handleSubmit(onSubmit)}>
+            <TIInput name="content" placeholder="Add your comment here..." />
+            <Button color="primary" type="submit">
               Submit Comment
             </Button>
           </form>

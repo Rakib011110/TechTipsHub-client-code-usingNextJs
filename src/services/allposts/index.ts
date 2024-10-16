@@ -33,22 +33,21 @@ export const getRecentPost = async () => {
   }
 };
 
-export const getCommentsForPost = async (postId: Comment) => {
+// Updated getCommentsForPost service to fetch comments based on commentId
+export const getCommentsForPost = async (commentId: string) => {
   try {
-    const res = await fetch(`${envConfig.baseApi}/posts/${postId}/comments`);
+    const res = await fetch(`${envConfig.baseApi}/posts/comments/${commentId}`);
 
     if (!res.ok) {
       throw new Error("Failed to fetch comments");
     }
 
-    return res.json();
+    return res.json(); // Make sure your API returns the comment in the expected format
   } catch (error) {
     console.error("Error fetching comments:", error);
-
-    return { data: [] }; // Return empty array in case of error
+    return { data: {} }; // Return empty array in case of error
   }
 };
-
 // src/services/mypost.ts
 
 // Update Post Service

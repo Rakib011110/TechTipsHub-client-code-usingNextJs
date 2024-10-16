@@ -9,7 +9,7 @@ import {
   SubmitHandler,
   useForm,
 } from "react-hook-form";
-import { FaTrash } from "react-icons/fa";
+import { FaTrash, FaEdit } from "react-icons/fa";
 
 import { useUser } from "@/src/context/user.provider";
 import { getMyPost } from "@/src/services/mypost";
@@ -18,7 +18,6 @@ import TIInput from "@/src/components/resubaleform/TIInput";
 import CreatePost from "@/src/components/home/@createposts/page";
 import PostContent from "@/src/components/UI/postediteUi/PostContent";
 
-// Define a Post type interface
 interface Post {
   category: string;
   isPremium: any;
@@ -31,7 +30,7 @@ interface Post {
   downvotes: number;
 }
 
-const MyPostsComponent = () => {
+const ManageMyPost = () => {
   const { user } = useUser();
   const [posts, setPosts] = useState<Post[]>([]);
   const [showModal, setShowModal] = useState(false);
@@ -39,13 +38,11 @@ const MyPostsComponent = () => {
   const [editData, setEditData] = useState({ title: "", content: "" });
   const [postImages, setPostImages] = useState<FileList | null>(null);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
-
   const [categoryFilter, setCategoryFilter] = useState<string>("");
   const [sortOption, setSortOption] = useState<string>("newest");
   const [searchTerm, setSearchTerm] = useState<string>("");
 
   const methods = useForm();
-
   const { handleSubmit } = methods;
 
   const { mutate: updatePostMutation } = useUpdatePost();
@@ -55,14 +52,13 @@ const MyPostsComponent = () => {
       if (user?._id) {
         const data = await getMyPost(user._id);
 
-        setPosts(data?.data || []); // Handle data from API response
+        setPosts(data?.data || []);
       }
     };
 
     fetchUserPosts();
   }, [user]);
 
-  // Handle edit button click
   const handleEditClick = (post: Post) => {
     setEditingPost(post);
     setEditData({ title: post.title, content: post.content });
@@ -78,9 +74,8 @@ const MyPostsComponent = () => {
       return;
     }
 
-    // Create postData manually to avoid circular references
     const postData = {
-      title: data.title, // Only the fields you need
+      title: data.title,
       content: data.content,
       author: user._id,
     };
@@ -89,7 +84,6 @@ const MyPostsComponent = () => {
     formData.append("content", postData.content);
     formData.append("author", postData.author);
 
-    // Attach images if any
     if (postImages) {
       Array.from(postImages).forEach((file) => {
         formData.append("postImages", file);
@@ -104,10 +98,10 @@ const MyPostsComponent = () => {
             toast.success("Post updated successfully!");
             setImagePreviews([]);
             setPostImages(null);
-            setShowModal(false); // Close modal on success
+            setShowModal(false);
           },
           onError: () => {
-            toast.success("Post update");
+            toast.success("Post update failed.");
           },
         },
       );
@@ -173,27 +167,21 @@ const MyPostsComponent = () => {
     try {
       await deletePost(id);
       setPosts((prevPosts) => prevPosts.filter((post) => post._id !== id));
-      toast.success("Post deleted successfully."); // Notify success
+      toast.success("Post deleted successfully.");
     } catch (error) {
       console.error("Error deleting post:", error);
-      toast.error("Error deleting post."); // Notify error
+      toast.error("Error deleting post.");
     }
   };
 
   return (
-    <div className="py-8 px-6">
+    <div className="py-8 px-6 max-w-screen-xl mx-auto ">
       <h1 className="text-3xl font-serif font-bold mb-5">
-        {" "}
-        WECLCOME TO PROFILE AND DASHBOARD
+        Welcome to Manage My Posts
       </h1>
 
-      <h1 className="text-1xl font-bold"> CREATE POST</h1>
-      <div>
-        <CreatePost />
-      </div>
-
-      <div>
-        <div className="flex space-x-4 mb-6">
+      <div className="mb-6">
+        <div className="flex space-x-4 mb-4">
           <input
             className="p-2 border rounded w-full"
             placeholder="Search by keywords..."
@@ -212,7 +200,6 @@ const MyPostsComponent = () => {
             <option value="CSS">CSS</option>
           </select>
         </div>
-
         <div className="flex space-x-4 mb-6">
           <button
             className={`px-4 py-2 rounded ${
@@ -245,120 +232,121 @@ const MyPostsComponent = () => {
         </div>
       </div>
 
-      <h1 className="text-3xl font-semibold mb-6">My Posts</h1>
+      <h2 className="text-2xl font-semibold mb-4">My Posts</h2>
+
       {posts.length === 0 ? (
         <p>No posts found</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-col-1 gap-6">
-          {sortedPosts.map((post: Post) => (
-            <div
-              key={post._id}
-              className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300"
-            >
-              <div className="relative h-72 rounded-3xl">
-                <Image
-                  fill
-                  alt=""
-                  className="object-cover"
-                  src={post.images?.[0] || "/default-post-image.jpg"}
-                />
-              </div>
-              <div className="p-4">
-                <h2 className="text-lg font-bold mb-2 truncate">
-                  <PostContent content={post.title} />
-                </h2>
-                <p className="text-sm text-gray-600 mb-4">
-                  {/* {post.content?.slice(0, 100)}... */}
-                  <PostContent content={post.content} />
-                </p>
-                <div className="flex justify-between items-center text-sm text-gray-500">
-                  <p>Upvotes: {post.upvotes || 0}</p>
-                  <p>Downvotes: {post.downvotes || 0}</p>
-                </div>
-              </div>
+        <table className="min-w-full bg-white border-collapse border">
+          <thead>
+            <tr>
+              <th className="border p-4">Image</th>
+              <th className="border p-4">Title</th>
+              <th className="border p-4">Content</th>
+              <th className="border p-4">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {sortedPosts.map((post: Post) => (
+              <tr key={post._id}>
+                <td className="border p-4">
+                  <Image
+                    alt="No Image"
+                    className="object-cover"
+                    height={50}
+                    src={post.images?.[0] || "/default-post-image.jpg"}
+                    width={80}
+                  />
+                </td>
+                <td className="border p-4 truncate">
+                  {" "}
+                  <h2 className="mt-4 text-xl font-bold text-gray-800">
+                    <PostContent content={post.title} />
+                  </h2>
+                </td>
+                <td className="border p-4 truncate">
+                  {/* <p content={post.content} /> */}
 
-              <div className="p-4 bg-gray-100 flex justify-between items-center">
-                <button
-                  className="text-green-600 font-medium hover:underline"
-                  onClick={() => handleEditClick(post)}
-                >
-                  Edit Post
-                </button>
-                <div>
+                  <PostContent content={post.content} />
+
+                  {/* <p>{post.content.slice(0, 50)} </p> */}
+                </td>
+                <td className="border p-4 flex space-x-4 justify-center">
                   <button
-                    className="bg-red-500 text-white flex px-4 py-2 rounded hover:bg-red-600"
+                    className="text-green-600 hover:underline"
+                    onClick={() => handleEditClick(post)}
+                  >
+                    <FaEdit />
+                  </button>
+                  <button
+                    className="text-red-600 hover:underline"
                     onClick={() => handleDelete(post._id)}
                   >
                     <FaTrash />
                   </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       )}
 
-      {/* Edit Post Modal */}
-      {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-8 rounded-lg shadow-lg max-w-lg w-full">
-            <h2 className="text-2xl font-semibold mb-4">Edit Post</h2>
-
+      {showModal && editingPost && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-8 rounded-lg shadow-lg max-w-md mx-auto">
+            <h2 className="text-xl font-bold mb-4">Edit Post</h2>
             <FormProvider {...methods}>
               <form onSubmit={handleSubmit(handleUpdatePost)}>
-                {/* Title Input */}
-                <p className="block mb-2 text-sm font-medium">Title</p>
                 <TIInput
-                  required
+                  label="Title"
                   name="title"
-                  placeholder="Enter your post title"
+                  placeholder="Edit your title"
+                  // value={editData.title}
                 />
-
-                {/* Content Input */}
-                <p className="block mb-2 text-sm font-medium">Content</p>
                 <TIInput
-                  required
-                  as="textarea"
+                  label="Content"
                   name="content"
-                  placeholder="Write your content here..."
-                  rows={6}
+                  placeholder="Edit your content"
                 />
-
-                {/* Image Upload */}
-                <p className="block mb-2 text-sm font-medium">Upload Images</p>
                 <input
                   multiple
                   accept="image/*"
-                  className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-                  id="postImages"
                   type="file"
                   onChange={handleImageChange}
                 />
-
-                {/* Preview Existing or New Images */}
+                <div className="flex space-x-4 mt-4">
+                  {imagePreviews.map((preview, index) => (
+                    <Image
+                      key={index}
+                      alt={`Preview ${index}`}
+                      className="object-cover"
+                      height={50}
+                      src={preview}
+                      width={50}
+                    />
+                  ))}
+                </div>
+                <button
+                  className="px-4 py-2 bg-blue-500 text-white rounded mt-4"
+                  type="submit"
+                >
+                  Update Post
+                </button>
               </form>
             </FormProvider>
-
-            {/* Buttons */}
-            <div className="flex justify-end space-x-2">
-              <button
-                className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-                onClick={() => setShowModal(false)}
-              >
-                Cancel
-              </button>
-              <button
-                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                onClick={handleUpdatePost}
-              >
-                Update Post
-              </button>
-            </div>
+            <button
+              className="px-4 py-2 mt-4 bg-gray-500 text-white rounded"
+              onClick={() => setShowModal(false)}
+            >
+              Cancel
+            </button>
           </div>
         </div>
       )}
+
+      <CreatePost />
     </div>
   );
 };
 
-export default MyPostsComponent;
+export default ManageMyPost;

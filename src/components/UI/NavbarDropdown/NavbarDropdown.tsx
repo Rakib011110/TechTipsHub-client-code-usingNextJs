@@ -56,9 +56,9 @@ const NavbarDropdown = () => {
           {/* Dashboard Navigation */}
           <DropdownItem
             key="dashboard"
-            onClick={() => handleNavigation("/admin/dashboard")}
+            onClick={() => handleNavigation("/dashboard")}
           >
-            Admin
+            Dashboard
           </DropdownItem>
 
           {/* Admin Dashboard Navigation */}

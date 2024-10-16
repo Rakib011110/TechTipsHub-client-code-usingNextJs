@@ -1,15 +1,17 @@
 "use client";
-import React, { useEffect, useState } from "react";
+
+import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Card, Button, CardFooter, CardBody } from "@nextui-org/react";
 import {
-  FaShareAlt,
-  FaFacebook,
-  FaTwitter,
-  FaLinkedin,
-  FaDownload,
-} from "react-icons/fa";
+  Card,
+  Button,
+  CardFooter,
+  CardBody,
+  Spinner,
+  Select,
+} from "@nextui-org/react";
+import { FaFacebook, FaTwitter, FaLinkedin, FaDownload } from "react-icons/fa";
 import { jsPDF } from "jspdf";
 import { toast } from "sonner";
 import AOS from "aos";
@@ -23,24 +25,34 @@ import PostContent from "@/src/components/UI/postediteUi/PostContent";
 
 const NewsFeed = () => {
   const [posts, setPosts] = useState<Post[]>([]);
-  console.log(posts);
+  console.log("Post Content:", posts);
+
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [categoryFilter, setCategoryFilter] = useState<string>("");
-  const [sortOption, setSortOption] = useState<string>("newest");
+  const [sortBy, setSortBy] = useState<string>("newest"); // New sort state
   const { user } = useUser();
+
+  const [userVotes, setUserVotes] = useState<{ [postId: string]: string }>({});
+
+  // Infinite Scroll States
+  const [displayCount, setDisplayCount] = useState<number>(5);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [hasMore, setHasMore] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         const { data } = await getRecentPost();
-        // console.log(data);
-
-        const sortedPosts = data.sort(
+        let sortedPosts = data.sort(
           (a: Post, b: Post) =>
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
         );
 
         setPosts(sortedPosts);
+        // If fetched posts are less than initial display count, set hasMore to false
+        if (sortedPosts.length <= displayCount) {
+          setHasMore(false);
+        }
       } catch (error) {
         console.error("Error fetching posts:", error);
       }
@@ -49,38 +61,64 @@ const NewsFeed = () => {
     fetchPosts();
   }, []);
 
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      getRecentPost()
+        .then(({ data }) => {
+          let sortedPosts = data.sort(
+            (a: Post, b: Post) =>
+              new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+          );
+
+          setPosts(sortedPosts);
+        })
+        .catch((error) => {
+          console.error("Error fetching posts:", error);
+        });
+    }, 4000); // 4 seconds
+
+    return () => clearInterval(intervalId); // Cleanup on unmount
+  }, []);
+
   const handleVote = async (
     postId: string,
     isUpvote: boolean,
     index: number,
   ) => {
+    // Check if the user has already voted on this post
+    if (userVotes[postId]) {
+      toast.error("You can only vote once on this post!");
+
+      return;
+    }
+
     try {
-      // Make the API call
       if (isUpvote) {
         await upvotePost(postId);
-        setPosts((prevPosts) => {
-          const updatedPosts = [...prevPosts];
-
-          updatedPosts[index].upvotes += 1;
-
-          return updatedPosts;
-        });
-        toast.success("Upvote successful!"); // Show success toast
+        setPosts((prevPosts) =>
+          prevPosts.map((post, i) =>
+            i === index
+              ? { ...post, upvotes: post.upvotes + 1 } // Increment upvote by 1
+              : post,
+          ),
+        );
+        setUserVotes((prevVotes) => ({ ...prevVotes, [postId]: "upvote" }));
+        toast.success("Upvote successful!");
       } else {
         await downvotePost(postId);
-        // Update local state for immediate feedback
-        setPosts((prevPosts) => {
-          const updatedPosts = [...prevPosts];
-
-          updatedPosts[index].downvotes += 1;
-
-          return updatedPosts;
-        });
-        toast.success("Downvote successful!"); // Show success toast
+        setPosts((prevPosts) =>
+          prevPosts.map((post, i) =>
+            i === index
+              ? { ...post, downvotes: post.downvotes + 1 } // Increment downvote by 1
+              : post,
+          ),
+        );
+        setUserVotes((prevVotes) => ({ ...prevVotes, [postId]: "downvote" }));
+        toast.success("Downvote successful!");
       }
     } catch (error) {
       console.error("Error voting:", error);
-      toast.error("Voting failed! Please try again."); // Show error toast
+      toast.error("Voting failed! Please try again.");
     }
   };
 
@@ -130,23 +168,84 @@ const NewsFeed = () => {
       ? post.category === categoryFilter
       : true;
 
-    // Temporarily disable premium check for testing
-    // const matchesPremium = user?.premiumUser ? true : !post.isPremium;
-
     return matchesSearch && matchesCategory;
   });
 
-  console.log(posts);
-  console.log(filteredPosts);
+  // Sorting Logic
+  const sortedPosts = filteredPosts.sort((a, b) => {
+    switch (sortBy) {
+      case "newest":
+        return (
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+      case "oldest":
+        return (
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        );
+      case "mostUpvoted":
+        return b.upvotes - a.upvotes;
+      case "mostDownvoted":
+        return b.downvotes - a.downvotes;
+      default:
+        return 0;
+    }
+  });
+
+  // Slice the posts to display only up to displayCount
+  const visiblePosts = sortedPosts.slice(0, displayCount);
+
+  // Handle Scroll Event
+  const handleScroll = useCallback(() => {
+    if (isLoading || !hasMore) return;
+
+    const scrollTop =
+      (document.documentElement && document.documentElement.scrollTop) ||
+      document.body.scrollTop;
+    const scrollHeight =
+      (document.documentElement && document.documentElement.scrollHeight) ||
+      document.body.scrollHeight;
+    const clientHeight =
+      document.documentElement.clientHeight || window.innerHeight;
+    const scrolledToBottom = scrollTop + clientHeight >= scrollHeight - 200; // Trigger when 200px from bottom
+
+    if (scrolledToBottom) {
+      setIsLoading(true);
+      // Simulate loading delay
+      setTimeout(() => {
+        const newDisplayCount = displayCount + 5;
+
+        if (newDisplayCount >= sortedPosts.length) {
+          setDisplayCount(sortedPosts.length);
+          setHasMore(false);
+        } else {
+          setDisplayCount(newDisplayCount);
+        }
+        setIsLoading(false);
+      }, 3000); // 3 second delay for simulation
+    }
+  }, [isLoading, hasMore, displayCount, sortedPosts.length]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [handleScroll]);
 
   useEffect(() => {
     AOS.init({
-      duration: 1000, // You can adjust animation duration here
-      once: true, // Whether animation should happen only once
+      duration: 1000,
+      once: true,
     });
 
     return () => AOS.refresh(); // Refresh AOS after every change
   }, []);
+
+  // Handle Sorting Option Change
+  const handleSortChange = (value: string) => {
+    setSortBy(value);
+    setDisplayCount(5); // Reset display count
+    setHasMore(true);
+  };
 
   return (
     <div className="max-w-screen-lg mx-auto">
@@ -155,60 +254,49 @@ const NewsFeed = () => {
           Latest Tech Tips & Tutorials
         </h2>
 
-        <div className="flex space-x-4 mb-6">
-          <input
-            className="p-2 border rounded w-full"
-            placeholder="Search by keywords..."
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+        <div className="flex flex-col gap-5 md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0 mb-6">
           <select
-            className="p-2 border rounded"
+            className="p-2 border rounded w-1/3"
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
           >
             <option value="">All Categories</option>
             <option value="Web">Web</option>
             <option value="Science">Data Science</option>
-            <option value="Patabase">Database</option>
+            <option value="Database">Database</option>
             <option value="Programming">Programming</option>
           </select>
+          <div className="flex space-x-4 w-full md:w-2/3">
+            <input
+              className="p-2 border rounded w-full"
+              placeholder="Search by keywords..."
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+
+          {/* Sort Dropdown */}
+          <div className="flex space-x-4 w-full md:w-1/3">
+            <label htmlFor="sort" className="text-sm font-medium text-gray-700">
+              Sort By:
+            </label>
+            <select
+              id="sort"
+              className="p-2 border rounded w-full"
+              value={sortBy}
+              onChange={(e) => handleSortChange(e.target.value)}
+            >
+              <option value="newest">Newest</option>
+              <option value="oldest">Oldest</option>
+              <option value="mostUpvoted">Most Upvoted</option>
+              <option value="mostDownvoted">Most Downvoted</option>
+            </select>
+          </div>
         </div>
 
-        {/* <div className="flex space-x-4 mb-6">
-          <button
-            className={`px-4 py-2 rounded ${
-              sortOption === "newest" ? "bg-blue-500 text-white" : "bg-gray-200"
-            }`}
-            onClick={() => setSortOption("newest")}
-          >
-            Newest
-          </button>
-          <button
-            className={`px-4 py-2 rounded ${
-              sortOption === "upvotes"
-                ? "bg-blue-500 text-white"
-                : "bg-gray-200"
-            }`}
-            onClick={() => setSortOption("upvotes")}
-          >
-            Most Upvoted
-          </button>
-          <button
-            className={`px-4 py-2 rounded ${
-              sortOption === "helpful"
-                ? "bg-blue-500 text-white"
-                : "bg-gray-200"
-            }`}
-            onClick={() => setSortOption("helpful")}
-          >
-            Most Helpful
-          </button>
-        </div> */}
-
         <div className="flex flex-col space-y-6" data-aos="fade-up">
-          {filteredPosts.map((post, index) => (
+          {visiblePosts.map((post, index) => (
             <Card
               key={post._id}
               className="relative hover:shadow-lg transition-shadow duration-300"
@@ -245,18 +333,16 @@ const NewsFeed = () => {
                     {post.images?.length > 0 && (
                       <Image
                         alt={post.title}
-                        className="   rounded-md mt-3"
+                        className="rounded-md mt-3"
                         height={400}
                         src={post.images[0]} // Assuming first image is featured
                         width={1000}
                       />
                     )}
                     <h2 className="mt-4 text-xl font-bold text-gray-800">
-                      {post.title}
+                      <PostContent content={post.title} />
                     </h2>
                     <PostContent content={post.content} />
-                    {/* <p content= /> */}
-                    {/* <p>{post.content} </p> */}
                   </CardBody>
                 </Link>
               </CardBody>
@@ -279,39 +365,55 @@ const NewsFeed = () => {
                     Downvote ({post.downvotes})
                   </Button>
                 </div>
-                <div className="flex space-x-2">
+
+                <div className="flex space-x-3">
                   <Button
-                    className="flex items-center"
-                    onClick={() => handleDownloadPDF(post)}
-                  >
-                    <FaDownload />
-                    <span className="ml-1">Download</span>
-                  </Button>
-                  <Button
-                    className="flex items-center"
+                    className="text-sm"
+                    variant="ghost"
                     onClick={() => handleShare("facebook", post)}
                   >
                     <FaFacebook />
-                    <span className="ml-1">Share</span>
                   </Button>
                   <Button
-                    className="flex items-center"
+                    className="text-sm"
+                    variant="ghost"
                     onClick={() => handleShare("twitter", post)}
                   >
                     <FaTwitter />
-                    <span className="ml-1">Share</span>
                   </Button>
                   <Button
-                    className="flex items-center"
+                    className="text-sm"
+                    variant="ghost"
                     onClick={() => handleShare("linkedin", post)}
                   >
                     <FaLinkedin />
-                    <span className="ml-1">Share</span>
+                  </Button>
+
+                  <Button
+                    className="text-sm"
+                    variant="ghost"
+                    onClick={() => handleDownloadPDF(post)}
+                  >
+                    <FaDownload />
                   </Button>
                 </div>
               </CardFooter>
             </Card>
           ))}
+
+          {/* Loading Spinner */}
+          {isLoading && hasMore && (
+            <div className="flex justify-center">
+              <Spinner />
+            </div>
+          )}
+
+          {/* No More Posts Message */}
+          {!hasMore && (
+            <div className="text-center text-gray-500 mt-4">
+              You have reached the end!
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -40,16 +40,16 @@ export const createPost = async (postData: any): Promise<any> => {
 };
 
 export const createPostComments = async (
-  formData: FormData,
+  content: string,
   postid: string,
 ): Promise<any> => {
   try {
     const { data } = await clientAxiosInstance.post(
-      `/posts/comments/${postid}`, // Use dynamic postid in the URL
-      formData,
+      `/posts/comments/${postid}`, // Using dynamic postid in the URL
+      { content }, // Sending content in JSON format
       {
         headers: {
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json",
         },
       },
     );
@@ -58,5 +58,19 @@ export const createPostComments = async (
   } catch (error) {
     console.error("Error creating comment:", error);
     throw error;
+  }
+};
+
+// Example implementation in allposts.js
+export const updateComment = async (commentId: string, updatedData: any) => {
+  try {
+    const response = await clientAxiosInstance.patch(
+      `posts/comments/${commentId}`,
+      updatedData,
+    );
+    return response.data; // Return the updated comment data
+  } catch (error) {
+    console.error("Error updating comment:", error);
+    throw new Error("Failed to update comment");
   }
 };
