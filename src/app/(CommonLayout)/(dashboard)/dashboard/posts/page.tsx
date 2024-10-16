@@ -6,6 +6,7 @@ import { toast, ToastContainer } from "react-toastify"; // Import toast
 import { getRecentPost, deletePost } from "@/src/services/allposts";
 import { Post } from "@/src/types";
 import "react-toastify/dist/ReactToastify.css"; // Import styles
+import PostContent from "@/src/components/UI/postediteUi/PostContent";
 
 const ManagePosts = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -53,8 +54,12 @@ const ManagePosts = () => {
             {posts.length > 0 ? (
               posts.map((post) => (
                 <tr key={post._id}>
-                  <td className="border border-gray-300 p-2">{post.title}</td>
-                  <td className="border border-gray-300 p-2">{post.content}</td>
+                  <td className="border border-gray-300 p-2">
+                    <PostContent content={post.title} />{" "}
+                  </td>
+                  <td className="border border-gray-300 p-2">
+                    <PostContent content={post.content} />
+                  </td>
                   <td className="border border-gray-300 p-2">
                     <button
                       className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"

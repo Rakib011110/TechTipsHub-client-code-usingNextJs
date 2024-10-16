@@ -18,48 +18,85 @@ import {
 
 import { useUser } from "@/src/context/user.provider";
 import { gettingAllUsers } from "@/src/services/getUser";
-import { IUser } from "@/src/types";
+import { IUser, Post } from "@/src/types";
+import { getRecentPost } from "@/src/services/allposts";
 
 const Dashboard = () => {
   const { user } = useUser();
   const [users, setUsers] = useState<IUser[]>([]);
-  const [monthlyPayments, setMonthlyPayments] = useState<any[]>([]); // You can update the type based on actual data
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [monthlyPayments, setMonthlyPayments] = useState<any[]>([]);
   const [userActivity, setUserActivity] = useState<any[]>([]);
   const [postAnalytics, setPostAnalytics] = useState<any[]>([]);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      const data = await gettingAllUsers();
+    const fetchDashboardData = async () => {
+      const usersData = await gettingAllUsers();
+      const postsData = await getRecentPost();
 
-      // Assuming the response has user activity and payment data
-      setUsers(data?.data || []);
+      setUsers(usersData?.data || []);
+      setPosts(postsData?.data || []);
 
-      // Mock data for the graphs (replace with actual data)
-      setMonthlyPayments([
-        { month: "Jan", amount: 1200 },
-        { month: "Feb", amount: 2100 },
-        { month: "Mar", amount: 800 },
-        { month: "Apr", amount: 1600 },
-        { month: "May", amount: 900 },
-      ]);
+      // Assuming your users model has createdAt and premium fields
+      const userActivityData = usersData.data.reduce(
+        (acc: any[], user: IUser) => {
+          const month = new Date(user.createdAt as string).toLocaleString(
+            "default",
+            {
+              month: "short",
+            },
+          );
+          const existingMonth = acc.find((item) => item.month === month);
 
-      setUserActivity([
-        { month: "Jan", users: 200 },
-        { month: "Feb", users: 450 },
-        { month: "Mar", users: 300 },
-        { month: "Apr", users: 500 },
-        { month: "May", users: 350 },
-      ]);
+          if (existingMonth) {
+            existingMonth.users += 1;
+          } else {
+            acc.push({ month, users: 1 });
+          }
 
-      setPostAnalytics([
-        { name: "Post 1", views: 400 },
-        { name: "Post 2", views: 300 },
-        { name: "Post 3", views: 200 },
-        { name: "Post 4", views: 100 },
-      ]);
+          return acc;
+        },
+        [],
+      );
+
+      setUserActivity(userActivityData);
+
+      // Assuming each user has a "premium" status and you can get payments from premium users
+      const monthlyPaymentsData = usersData.data.reduce(
+        (acc: any[], user: IUser) => {
+          if (user.premiumUser) {
+            const month = new Date(user?.createdAt as string).toLocaleString(
+              "default",
+              {
+                month: "short",
+              },
+            );
+            const existingMonth = acc.find((item) => item.month === month);
+
+            if (existingMonth) {
+              existingMonth.amount += 40; // Assuming $20 per premium user
+            } else {
+              acc.push({ month, amount: 20 });
+            }
+          }
+
+          return acc;
+        },
+        [],
+      );
+
+      setMonthlyPayments(monthlyPaymentsData);
+
+      // Post analytics: count views for each post
+      const postAnalyticsData = postsData.data.map((post: Post) => ({
+        name: post.title.slice(0, 10),
+        // views: post.views || 0,
+      }));
+
+      setPostAnalytics(postAnalyticsData);
     };
 
-    fetchUsers();
+    fetchDashboardData();
   }, [user]);
 
   return (
